@@ -3,6 +3,8 @@ import ".././globals.css";
 import Home from "./page";
 import LeftsideBar from "../components/LeftsideBar";
 import RightsideBar from "../components/RightsideBar";
+import { ClerkProvider, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import Loader from "../components/Loader";
 
 const geistSans = localFont({
   src: ".././fonts/GeistVF.woff",
@@ -22,19 +24,28 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-<div className="flex justify-between max-w-6xl mx-auto">
-  <div className="hidden sm:inline border-r h-screen sticky top-0">
-    <LeftsideBar/>
-  </div>
-<div className="w-2xl flex-1"> {children}</div>
-<div className="lg:flex-col p-3 h-screen border-l hidden lg:flex w-[24rem]">
-  <RightsideBar/>
-</div>
-</div>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+           <ClerkLoading>
+              <Loader />
+            </ClerkLoading>
+            <ClerkLoaded>
+          <div className="flex justify-between max-w-6xl mx-auto">
+            <div className="hidden sm:inline border-r h-screen sticky top-0">
+              <LeftsideBar />
+            </div>
+           
+            <div className="w-2xl flex-1"> {children}</div>
+            <div className="lg:flex-col p-3 h-screen border-l hidden lg:flex w-[24rem]">
+              <RightsideBar />
+            </div>
+          </div>
+          </ClerkLoaded>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
